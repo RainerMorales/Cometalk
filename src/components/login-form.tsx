@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { auth } from "../../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 export function LoginForm({
   className,
@@ -19,11 +20,19 @@ export function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
+  const create = async () => {
+    try {
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+      console.log(user)
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className=" text-black ">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">Welcome!</CardTitle>
           <CardDescription>Enter your Username below</CardDescription>
         </CardHeader>
         <CardContent>
@@ -36,6 +45,7 @@ export function LoginForm({
                   id="email"
                   type="email"
                   placeholder="m@example.com"
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -46,6 +56,7 @@ export function LoginForm({
                   id="password"
                   type="password"
                   placeholder="m@example.com"
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
@@ -53,13 +64,14 @@ export function LoginForm({
                 <Label htmlFor="email">Username</Label>
                 <Input
                   className="border-zinc-800"
-                  id="Name"
-                  type="Name"
+                  id="username"
+                  type="username"
                   placeholder="Juan"
+                  onChange={(e) => setUserName(e.target.value)}
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <Button onClick={create} type="submit" className="w-full">
                 Login
               </Button>
             </div>
