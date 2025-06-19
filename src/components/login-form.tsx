@@ -11,8 +11,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { auth } from "../../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
+import { LogOut } from "lucide-react";
 export function LoginForm({
   className,
   ...props
@@ -20,13 +27,40 @@ export function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("User is signed in:", user.email);
+    } else {
+      console.log("User is signed out");
+    }
+  });
   const create = async () => {
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(user)
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      await sendEmailVerification(user);
     } catch (err) {
       console.log(err);
     }
+  };
+  const login = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log(userCredential.user + "login success!");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const logout = async () => {
+    await signOut(auth);
   };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -72,7 +106,10 @@ export function LoginForm({
                 />
               </div>
               <Button onClick={create} type="submit" className="w-full">
-                Login
+                Create
+              </Button>
+              <Button onClick={login} type="submit" className="w-full">
+                Log in
               </Button>
             </div>
             <div className="mt-4 text-center text-sm ">
@@ -82,6 +119,9 @@ export function LoginForm({
               </a>
             </div>
           </form>
+          <Button onClick={logout} type="submit" className="w-full">
+            Log out
+          </Button>
         </CardContent>
       </Card>
     </div>
