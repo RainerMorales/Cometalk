@@ -19,7 +19,7 @@ import {
 } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
-import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 export function LoginForm({
   className,
   ...props
@@ -27,6 +27,7 @@ export function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
+  const router = useRouter();
   onAuthStateChanged(auth, (user) => {
     if (user) {
       console.log("User is signed in:", user.email);
@@ -42,7 +43,12 @@ export function LoginForm({
         password
       );
       const user = userCredential.user;
-      await sendEmailVerification(user);
+      try {
+        await sendEmailVerification(user);
+        console.log("check email");
+      } catch (err) {
+        console.log(err);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -55,12 +61,10 @@ export function LoginForm({
         password
       );
       console.log(userCredential.user + "login success!");
+      router.push("/");
     } catch (err) {
       console.log(err);
     }
-  };
-  const logout = async () => {
-    await signOut(auth);
   };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -119,9 +123,6 @@ export function LoginForm({
               </a>
             </div>
           </form>
-          <Button onClick={logout} type="submit" className="w-full">
-            Log out
-          </Button>
         </CardContent>
       </Card>
     </div>
