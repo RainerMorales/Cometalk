@@ -58,6 +58,7 @@ export function LoginForm({
       console.log(userCredential.user, "login success!");
       router.push("/");
     } catch (err) {
+      setPassword("")
       setLoading(false)
       alert(err);
     }
@@ -87,7 +88,7 @@ export function LoginForm({
                 <Label htmlFor="email">Password</Label>
                 <Input
                   className="border-zinc-800"
-                  id="password"
+                  value={password}
                   type="password"
                   placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
