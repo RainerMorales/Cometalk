@@ -20,54 +20,59 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-export function LoginForm({
+export function SignUp({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState("");
   const router = useRouter();
-
-  // const create = async () => {
-  //   try {
-  //     const userCredential = await createUserWithEmailAndPassword(
-  //       auth,
-  //       email,
-  //       password
-  //     );
-  //     const user = userCredential.user;
-  //     try {
-  //       await sendEmailVerification(user);
-  //       console.log("check email");
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("User is signed in:", user.email);
+    } else {
+      console.log("User is signed out");
+    }
+  });
+  const create = async () => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      try {
+        await sendEmailVerification(user);
+        console.log("check email");
+      } catch (err) {
+        console.log(err);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const login = async () => {
-    setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
-      console.log(userCredential.user, "login success!");
+      console.log(userCredential.user + "login success!");
       router.push("/");
     } catch (err) {
-      setLoading(false)
-      alert(err);
+      alert("somehing went wrong!");
+      console.log(err);
     }
   };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className=" text-black ">
         <CardHeader>
-          <CardTitle className="text-2xl">Log in</CardTitle>
-          <CardDescription>Enter your email and password</CardDescription>
+          <CardTitle className="text-2xl">Create an Account</CardTitle>
+          <CardDescription>Enter your details to get started.</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
@@ -94,21 +99,20 @@ export function LoginForm({
                   required
                 />
               </div>
-              {!loading ? (
-                <Button
-                  onClick={(e) => {
-                    e.preventDefault(), login();
-                  }}
-                  type="submit"
-                  className="w-full "
-                >
-                  Log in
-                </Button>
-              ) : (
-                <Button className="w-full cursor-not-allowed">
-                  <span className="loading loading-spinner loading-xs "></span>
-                </Button>
-              )}
+              <div className="grid gap-2 ">
+                <Label htmlFor="email">Username</Label>
+                <Input
+                  className="border-zinc-800"
+                  id="username"
+                  type="username"
+                  placeholder="Juan"
+                  onChange={(e) => setUserName(e.target.value)}
+                  required
+                />
+              </div>
+              <Button onClick={create} type="submit" className="w-full">
+                Create
+              </Button>
             </div>
             <div className="mt-4 text-center text-sm ">
               Don&apos;t have an account?{" "}
