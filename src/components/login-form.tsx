@@ -56,7 +56,7 @@ export function LoginForm({
         password
       );
       console.log(userCredential.user, "login success!");
-      router.push("/");
+      router.push("/Chat");
     } catch (err) {
       setPassword("")
       setLoading(false)

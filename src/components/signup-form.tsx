@@ -30,7 +30,7 @@ export function SignUp({
   const router = useRouter();
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log("User is signed in:", user.email);
+      console.log("User is signed in:", user);
     } else {
       console.log("User is signed out");
     }
@@ -46,6 +46,7 @@ export function SignUp({
       try {
         await sendEmailVerification(user);
         console.log("check email");
+        router.push('/Login')
       } catch (err) {
         console.log(err);
       }
@@ -110,7 +111,13 @@ export function SignUp({
                   required
                 />
               </div>
-              <Button onClick={create} type="submit" className="w-full">
+              <Button
+                onClick={(e) => {
+                  e.preventDefault(), create();
+                }}
+                type="submit"
+                className="w-full"
+              >
                 Create
               </Button>
             </div>
