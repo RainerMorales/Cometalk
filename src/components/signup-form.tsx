@@ -1,5 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,6 +17,7 @@ import {
   sendEmailVerification,
   signOut,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
@@ -43,13 +45,12 @@ export function SignUp({
         password
       );
       const user = userCredential.user;
-      try {
-        await sendEmailVerification(user);
-        console.log("check email");
-        router.push('/Login')
-      } catch (err) {
-        console.log(err);
-      }
+      await updateProfile(user,{
+        displayName:userName
+      })
+      await sendEmailVerification(user);
+      console.log("check email");
+      router.push("/login");
     } catch (err) {
       console.log(err);
     }
@@ -95,7 +96,7 @@ export function SignUp({
                   className="border-zinc-800"
                   id="password"
                   type="password"
-                  placeholder="Password"
+                  placeholder="example1234"
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
@@ -106,7 +107,7 @@ export function SignUp({
                   className="border-zinc-800"
                   id="username"
                   type="username"
-                  placeholder="Juan"
+                  placeholder="Ren"
                   onChange={(e) => setUserName(e.target.value)}
                   required
                 />
@@ -121,11 +122,11 @@ export function SignUp({
                 Create
               </Button>
             </div>
-            <div className="mt-4 text-center text-sm ">
-              Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
-                Sign up
-              </a>
+            <div className="mt-4 text-center text-sm">
+              Already have an account?{" "}
+              <Link href="/login" className="underline underline-offset-4">
+                Login
+              </Link>
             </div>
           </form>
         </CardContent>

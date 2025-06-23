@@ -24,14 +24,14 @@ export default function HomePage() {
           </div>
         </div>
 
-        <Link href="/Login">
+        <Link href="/login">
           <Button className="w-80 py-6 hover:bg-gray-900 shadow-2xl border">
             Get Started!
           </Button>
         </Link>
       </main>
-      <footer className="fixed bottom-0 w-full text-center p-4 text-xs opacity-80">
-        Developed by Rainer Morales 👋💖
+      <footer className="fixed bottom-0 w-full text-center p-4 text-xs opacity-70">
+        Developed by Rainer Morales 😎💖
       </footer>
     </div>
   );

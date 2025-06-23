@@ -12,8 +12,9 @@ export default function ChatLayout({
   useEffect(() => {
     const unsubcribe = auth.onAuthStateChanged((user) => {
       if (!user) {
-        router.push("/Login");
+        router.push("/login");
       } else {
+        router.push("/chat")
         setLoading(false);
       }
     });

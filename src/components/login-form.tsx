@@ -1,5 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -56,7 +57,7 @@ export function LoginForm({
         password
       );
       console.log(userCredential.user, "login success!");
-      router.push("/Chat");
+      router.push("/chat");
     } catch (err) {
       setPassword("")
       setLoading(false)
@@ -113,9 +114,7 @@ export function LoginForm({
             </div>
             <div className="mt-4 text-center text-sm ">
               Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
-                Sign up
-              </a>
+              <Link href={"/signup"} className="underline underline-offset-4">Signup</Link>
             </div>
           </form>
         </CardContent>
