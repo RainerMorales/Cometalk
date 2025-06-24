@@ -35,7 +35,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="flex flex-col gap-2 ">
-          <Link href="/login">
+          <Link href="/Login">
             <Button className="w-80 py-6 hover:bg-gray-900  border">
               Get Started!
             </Button>
