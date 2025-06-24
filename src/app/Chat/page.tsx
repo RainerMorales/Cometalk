@@ -2,7 +2,6 @@
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -27,6 +26,7 @@ export default function Home() {
       await signOut(auth);
       router.push("./login");
     } catch (err) {
+      console.log(err)
       alert("something went wrong!");
     }
   };

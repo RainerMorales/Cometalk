@@ -34,6 +34,7 @@ export function LoginForm({
       await signInWithEmailAndPassword(auth, email, password);
       router.push("/chat");
     } catch (err) {
+      console.error(err)
       setPassword("");
       setLoading(false);
       toast.error("Invalid Credentials!", {
@@ -85,7 +86,7 @@ export function LoginForm({
               {!loading ? (
                 <Button
                   onClick={(e) => {
-                    e.preventDefault(), login();
+                    e.preventDefault(); login();
                   }}
                   type="submit"
                   className="w-full "

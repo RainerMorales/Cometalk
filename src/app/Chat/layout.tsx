@@ -19,7 +19,7 @@ export default function ChatLayout({
       }
     });
     return () => unsubcribe();
-  }, []);
+  }, [router]);
   if (loading) {
     return (
       <>

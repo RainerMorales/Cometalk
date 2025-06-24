@@ -58,6 +58,7 @@ export function SignUp({
         duration:5000
       });
     } catch (err) {
+      console.error(err)
       setLoading(false)
       toast.error("Something went wrong,Please try again!", {
         position: "top-right",
@@ -121,7 +122,7 @@ export function SignUp({
               {!loading ? (
                 <Button
                   onClick={(e) => {
-                    e.preventDefault(), create();
+                    e.preventDefault(); create();
                   }}
                   type="submit"
                   className="w-full"
