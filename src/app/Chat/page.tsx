@@ -9,24 +9,35 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { auth, db } from "../../../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, getDocs } from "firebase/firestore";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IoSend } from "react-icons/io5";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 export default function Home() {
   const user = auth.currentUser;
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [dialog, setDialog] = useState(true);
+  const [users, setUsers] = useState<{ name: string; uid: string }[]>([]);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const snapshot = await getDocs(collection(db, "messages"));
+      const usersData = snapshot.docs.map(
+        (doc) => doc.data() as { name: string; uid: string }
+      );
+      setUsers(usersData);
+    };
+    fetchUsers()
+  }, []);
   const Logout = async () => {
     try {
       await signOut(auth);
       router.push("/Login");
     } catch (err) {
-      console.log(err)
+      console.log(err);
       alert("something went wrong!");
     }
   };
@@ -36,7 +47,7 @@ export default function Home() {
         text: message,
         createdAt: serverTimestamp(),
         uid: user?.uid,
-        getDisplayName: user?.displayName,
+        DisplayName: user?.displayName,
         email: user?.email,
       });
     } catch (err) {
@@ -60,13 +71,23 @@ export default function Home() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <div className=" flex items-center justify-between text-center p-4 bg-zinc-800   border-b">
+      <div className=" flex items-center justify-between text-center p-4 bg-black  border-b">
         <div className="text-white font-bold ">{user?.displayName}</div>
         <Button onClick={Logout} className="bg-red-800">
           Log out
         </Button>
       </div>
       <main className="h- max-w-2xl m-auto ">
+        <div className="border p-2 flex">
+          <div className="p-2 text-center text-xs min-w-20 border rounded-full bg-black text-white">
+            Rainer
+          </div>
+          {users.map((user, i) => (
+            <div key={i} className="p-2 text-center text-xs min-w-20 border rounded-full bg-black text-white">
+              {user.name}
+            </div>
+          ))}
+        </div>
         <div className=" m-4 rounded">
           <div className="text-xs flex justify-center opacity-60">
             <div>May10 | 9:55 PM</div>

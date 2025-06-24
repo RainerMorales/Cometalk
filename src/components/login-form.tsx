@@ -29,6 +29,7 @@ export function LoginForm({
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const login = async () => {
+    
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);

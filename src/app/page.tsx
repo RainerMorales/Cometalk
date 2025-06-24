@@ -16,24 +16,19 @@ import { AnimatedGradientText } from "@/components/magicui/animated-gradient-tex
 export default function HomePage() {
   return (
     <div className="relative min-h-screen flex flex-col justify-start p-32 items-center">
-      <main className="flex flex-col items-center justify-center gap-6 px-6 text-left">
-        <div>
-          <div className="text-6xl font-bold ">Welcome</div>
-          <div className="flex items-center gap-2 p-2">
-            <div className="text-3xl opacity-80">
-              to{" "}
-              <AnimatedGradientText className="font-bold">
-                Cometalk
-              </AnimatedGradientText>
-            </div>
-            <Image alt="image" height={50} width={25} src={"/chat.png"}></Image>
+      <main className="flex flex-col items-center justify-center gap-20 px-6 text-left">
+        <div className="text-center space-y-4">
+          <div className="flex items-center justify-center text-6xl font-extrabold">
+            <div className="">Come</div>
+            <AnimatedGradientText className="font-bold">
+              talk
+            </AnimatedGradientText>
           </div>
-        </div>
-        <div>
-          <div className="opacity-80 text-sm">
+          <p className="text-zinc-400 text-sm">
             Talk to Anyone. Anytime. Anywhere.
-          </div>
+          </p>
         </div>
+
         <div className="flex flex-col gap-2 ">
           <Link href="/Login">
             <Button className="w-80 py-6 hover:bg-gray-900  border">
@@ -79,7 +74,7 @@ export default function HomePage() {
 
               <AlertDialogFooter>
                 <AlertDialogCancel className="bg-black text-white">
-                 Close  
+                  Close
                 </AlertDialogCancel>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -87,7 +82,7 @@ export default function HomePage() {
         </div>
       </main>
       <footer className="fixed bottom-0 w-full text-center p-4 text-xs opacity-70">
-        Developed by Rainer Morales 😎💖
+        Developed by Rainer Morales &copy; 2025
       </footer>
     </div>
   );
