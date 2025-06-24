@@ -1,4 +1,14 @@
 "use client";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { auth, db } from "../../../firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { Input } from "@/components/ui/input";
@@ -11,6 +21,7 @@ export default function Home() {
   const user = auth.currentUser;
   const router = useRouter();
   const [message, setMessage] = useState("");
+  const [dialog, setDialog] = useState(true);
   const Logout = async () => {
     try {
       await signOut(auth);
@@ -32,9 +43,23 @@ export default function Home() {
       alert(err);
     }
   };
-
   return (
     <>
+      <AlertDialog open={dialog} onOpenChange={setDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Welcome <span className="text-red-800">{user?.displayName}!</span>
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Please be respectful and kind when chatting with others!🙂
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction>I Understand!</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <div className=" flex items-center justify-between text-center p-4 bg-zinc-800   border-b">
         <div className="text-white font-bold ">{user?.displayName}</div>
         <Button onClick={Logout} className="bg-red-800">

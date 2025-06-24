@@ -26,28 +26,19 @@ export function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const[dialog,setDialog]=useState(false)
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const login = async () => {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      const user = auth?.currentUser;
       router.push("/chat");
-      toast(
-        <span>
-          Welcome <span className="font-bold">{user?.displayName}</span>, Please
-          be respectful and kind when chatting with others!🙂
-        </span>,
-        {
-          duration:8000
-        }
-      );
     } catch (err) {
       setPassword("");
       setLoading(false);
       toast.error("Invalid Credentials!", {
         position: "top-right",
+        duration:5000
       });
     }
   };
@@ -77,11 +68,19 @@ export function LoginForm({
                 <Input
                   className="border-zinc-800"
                   value={password}
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
+                <label className="text-sm flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={showPassword}
+                    onChange={(e) => setShowPassword(e.target.checked)}
+                  />
+                  Show Password
+                </label>
               </div>
               {!loading ? (
                 <Button
@@ -99,6 +98,7 @@ export function LoginForm({
                 </Button>
               )}
             </div>
+
             <div className="mt-4 text-center text-sm ">
               Don&apos;t have an account?{" "}
               <Link href={"/signup"} className="underline underline-offset-4">
