@@ -15,13 +15,12 @@ import { auth } from "../../firebase";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
-  signOut,
-  signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast,{ Toaster } from "react-hot-toast";
 export function SignUp({
   className,
   ...props
@@ -45,28 +44,19 @@ export function SignUp({
         password
       );
       const user = userCredential.user;
-      await updateProfile(user,{
-        displayName:userName
-      })
+      await updateProfile(user, {
+        displayName: userName,
+      });
       await sendEmailVerification(user);
       console.log("check email");
       router.push("/login");
+      toast.success("Account created successfully!",{
+        position:"top-right"
+      })
     } catch (err) {
-      console.log(err);
-    }
-  };
-  const login = async () => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log(userCredential.user + "login success!");
-      router.push("/");
-    } catch (err) {
-      alert("somehing went wrong!");
-      console.log(err);
+      toast.error("Something went wrong,Please try again!", {
+        position: "top-right",
+      });
     }
   };
   return (

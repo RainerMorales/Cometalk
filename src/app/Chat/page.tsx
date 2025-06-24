@@ -7,7 +7,6 @@ import { IoSend } from "react-icons/io5";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { getDisplayName } from "next/dist/shared/lib/utils";
 export default function Home() {
   const user = auth.currentUser;
   const router = useRouter();

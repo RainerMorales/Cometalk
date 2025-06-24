@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 import {
   Card,
   CardContent,
@@ -13,14 +14,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { auth } from "../../firebase";
 import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  signOut,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+
 export function LoginForm({
   className,
   ...props
@@ -28,40 +26,29 @@ export function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const[dialog,setDialog]=useState(false)
   const router = useRouter();
-
-  // const create = async () => {
-  //   try {
-  //     const userCredential = await createUserWithEmailAndPassword(
-  //       auth,
-  //       email,
-  //       password
-  //     );
-  //     const user = userCredential.user;
-  //     try {
-  //       await sendEmailVerification(user);
-  //       console.log("check email");
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
   const login = async () => {
     setLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log(userCredential.user, "login success!");
+      await signInWithEmailAndPassword(auth, email, password);
+      const user = auth?.currentUser;
       router.push("/chat");
+      toast(
+        <span>
+          Welcome <span className="font-bold">{user?.displayName}</span>, Please
+          be respectful and kind when chatting with others!🙂
+        </span>,
+        {
+          duration:8000
+        }
+      );
     } catch (err) {
-      setPassword("")
-      setLoading(false)
-      alert(err);
+      setPassword("");
+      setLoading(false);
+      toast.error("Invalid Credentials!", {
+        position: "top-right",
+      });
     }
   };
   return (
@@ -114,7 +101,9 @@ export function LoginForm({
             </div>
             <div className="mt-4 text-center text-sm ">
               Don&apos;t have an account?{" "}
-              <Link href={"/signup"} className="underline underline-offset-4">Signup</Link>
+              <Link href={"/signup"} className="underline underline-offset-4">
+                Signup
+              </Link>
             </div>
           </form>
         </CardContent>
