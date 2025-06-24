@@ -11,16 +11,17 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  signOut,
   updateProfile,
 } from "firebase/auth";
-import { onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { doc, collection, setDoc, serverTimestamp } from "firebase/firestore";
 export function SignUp({
   className,
   ...props
@@ -31,15 +32,8 @@ export function SignUp({
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log("User is signed in:", user);
-    } else {
-      console.log("User is signed out");
-    }
-  });
   const create = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -50,19 +44,25 @@ export function SignUp({
       await updateProfile(user, {
         displayName: userName,
       });
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        userName: userName,
+        email: user.email,
+        createdAt: serverTimestamp(),
+      });
       await sendEmailVerification(user);
-      console.log("check email");
+      await signOut(auth);
       router.push("/Login");
-      toast.success("Account created successfully!", {
+      toast.success("Check your email!", {
         position: "top-right",
-        duration:5000
+        duration: 5000,
       });
     } catch (err) {
-      console.error(err)
-      setLoading(false)
+      console.error(err);
+      setLoading(false);
       toast.error("Something went wrong,Please try again!", {
         position: "top-right",
-        duration:5000
+        duration: 5000,
       });
     }
   };
@@ -122,7 +122,8 @@ export function SignUp({
               {!loading ? (
                 <Button
                   onClick={(e) => {
-                    e.preventDefault(); create();
+                    e.preventDefault();
+                    create();
                   }}
                   type="submit"
                   className="w-full"

@@ -9,7 +9,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { auth, db } from "../../../firebase";
-import { collection, addDoc, serverTimestamp, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+} from "firebase/firestore";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IoSend } from "react-icons/io5";
@@ -21,16 +26,16 @@ export default function Home() {
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [dialog, setDialog] = useState(true);
-  const [users, setUsers] = useState<{ name: string; uid: string }[]>([]);
+  const [users, setUsers] = useState<{ name: string; userName: string }[]>([]);
   useEffect(() => {
     const fetchUsers = async () => {
-      const snapshot = await getDocs(collection(db, "messages"));
+      const snapshot = await getDocs(collection(db, "users"));
       const usersData = snapshot.docs.map(
-        (doc) => doc.data() as { name: string; uid: string }
+        (doc) => doc.data() as { name: string; userName: string }
       );
       setUsers(usersData);
     };
-    fetchUsers()
+    fetchUsers();
   }, []);
   const Logout = async () => {
     try {
@@ -63,7 +68,7 @@ export default function Home() {
               Welcome <span className="text-red-800">{user?.displayName}!</span>
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Please be respectful and kind when chatting with others!🙂
+              Please be respectful and kind when chatting with others!
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -78,15 +83,31 @@ export default function Home() {
         </Button>
       </div>
       <main className="h- max-w-2xl m-auto ">
-        <div className="border p-2 flex">
-          <div className="p-2 text-center text-xs min-w-20 border rounded-full bg-black text-white">
-            Rainer
-          </div>
+        <div className="border rounded-full overflow-auto p-4 gap-2 flex">
+          
           {users.map((user, i) => (
-            <div key={i} className="p-2 text-center text-xs min-w-20 border rounded-full bg-black text-white">
-              {user.name}
+            <div
+              key={i}
+              className="p-2 text-center text-xs min-w-20 border-3 bg-black border-green-700 text-white rounded-full "
+            >
+              {user.userName}
             </div>
           ))}
+          <div className="p-2 text-center text-xs min-w-20 border-3 bg-black border-green-700 text-white rounded-full ">
+            k
+          </div>
+          <div className="p-2 text-center text-xs min-w-20 border-3 bg-black border-green-700 text-white rounded-full ">
+            k
+          </div>
+          <div className="p-2 text-center text-xs min-w-20 border-3 bg-black border-green-700 text-white rounded-full ">
+            k
+          </div>
+          <div className="p-2 text-center text-xs min-w-20 border-3 bg-black border-green-700 text-white rounded-full ">
+            k
+          </div>
+          <div className="p-2 text-center text-xs min-w-20 border-3 bg-black border-green-700 text-white rounded-full ">
+            k
+          </div>
         </div>
         <div className=" m-4 rounded">
           <div className="text-xs flex justify-center opacity-60">

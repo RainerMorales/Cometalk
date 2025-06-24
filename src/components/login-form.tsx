@@ -13,9 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { auth } from "../../firebase";
-import {
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -28,19 +26,33 @@ export function LoginForm({
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+
   const login = async () => {
-    
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      router.push("/Chat");
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user =userCredential.user
+      if(user.emailVerified){
+        router.push("/Chat");
+      }else{
+        toast.error("Please verify your email first!", {
+          position: "top-right",
+          duration: 5000,
+        });
+        setLoading(false)
+      }
+      
     } catch (err) {
-      console.error(err)
+      console.error(err);
       setPassword("");
       setLoading(false);
       toast.error("Invalid Credentials!", {
         position: "top-right",
-        duration:5000
+        duration: 5000,
       });
     }
   };
@@ -87,7 +99,8 @@ export function LoginForm({
               {!loading ? (
                 <Button
                   onClick={(e) => {
-                    e.preventDefault(); login();
+                    e.preventDefault();
+                    login();
                   }}
                   type="submit"
                   className="w-full "

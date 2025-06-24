@@ -14,7 +14,6 @@ export default function ChatLayout({
       if (!user) {
         router.push("/Login");
       } else {
-        router.push("/Chat")
         setLoading(false);
       }
     });
