@@ -24,7 +24,7 @@ export default function Home() {
   const Logout = async () => {
     try {
       await signOut(auth);
-      router.push("./login");
+      router.push("/Login");
     } catch (err) {
       console.log(err)
       alert("something went wrong!");
