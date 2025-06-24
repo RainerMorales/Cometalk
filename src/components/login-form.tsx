@@ -32,7 +32,7 @@ export function LoginForm({
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/chat");
+      router.push("/Chat");
     } catch (err) {
       console.error(err)
       setPassword("");
