@@ -52,7 +52,7 @@ export function SignUp({
       });
       await sendEmailVerification(user);
       console.log("check email");
-      router.push("/login");
+      router.push("/Login");
       toast.success("Account created successfully!", {
         position: "top-right",
         duration:5000
