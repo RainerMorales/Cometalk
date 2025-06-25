@@ -11,7 +11,8 @@ export default function ChatLayout({
   const router = useRouter();
   useEffect(() => {
     const unsubcribe = auth.onAuthStateChanged((user) => {
-      if (!user) {
+      console.log(user)
+      if (!user || !user.emailVerified) {
         router.push("/Login");
       } else {
         setLoading(false);

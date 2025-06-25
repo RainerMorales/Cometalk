@@ -14,6 +14,10 @@ import {
   addDoc,
   serverTimestamp,
   getDocs,
+  onSnapshot,
+  query,
+  orderBy,
+  Timestamp,
 } from "firebase/firestore";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -21,21 +25,38 @@ import { IoSend } from "react-icons/io5";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 export default function Home() {
   const user = auth.currentUser;
   const router = useRouter();
   const [message, setMessage] = useState("");
+
   const [dialog, setDialog] = useState(true);
   const [users, setUsers] = useState<{ name: string; userName: string }[]>([]);
+  const [displayMessage, setDisplayMessage] =
+    useState<{ text: string; DisplayName: string; createdAt: Timestamp }[]>();
   useEffect(() => {
-    const fetchUsers = async () => {
-      const snapshot = await getDocs(collection(db, "users"));
+    const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
       const usersData = snapshot.docs.map(
         (doc) => doc.data() as { name: string; userName: string }
       );
       setUsers(usersData);
-    };
-    fetchUsers();
+    });
+    return () => unsubscribe();
+  }, []);
+  useEffect(() => {
+    const messageQuery = query(
+      collection(db, "messages"),
+      orderBy("createdAt", "desc")
+    );
+    const messages = onSnapshot(messageQuery, (snapshot) => {
+      const userMessages = snapshot.docs.map(
+        (doc) =>
+          doc.data() as { text: string; DisplayName: string; createdAt: Timestamp }
+      );
+      setDisplayMessage(userMessages.reverse());
+    });
+    return () => messages();
   }, []);
   const Logout = async () => {
     try {
@@ -47,14 +68,20 @@ export default function Home() {
     }
   };
   const sendMessage = async () => {
+    if (!message.trim()) {
+      toast.error("Type Something!", {
+        position: "top-right",
+      });
+      return;
+    }
     try {
       await addDoc(collection(db, "messages"), {
         text: message,
         createdAt: serverTimestamp(),
         uid: user?.uid,
         DisplayName: user?.displayName,
-        email: user?.email,
       });
+      setMessage("");
     } catch (err) {
       alert(err);
     }
@@ -65,7 +92,8 @@ export default function Home() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Welcome <span className="text-red-800">{user?.displayName}!</span>
+              Welcome{" "}
+              <span className="text-blue-800">{user?.displayName}!</span>
             </AlertDialogTitle>
             <AlertDialogDescription>
               Please be respectful and kind when chatting with others!
@@ -83,45 +111,47 @@ export default function Home() {
         </Button>
       </div>
       <main className="h- max-w-2xl m-auto ">
-        <div className="border rounded-full overflow-auto p-4 gap-2 flex">
-          
+        <div className="border rounded overflow-auto p-4 gap-2 flex">
           {users.map((user, i) => (
             <div
               key={i}
-              className="p-2 text-center text-xs min-w-20 border-3 bg-black border-green-700 text-white rounded-full "
+              className="p-2 text-center text-xs min-w-18  flex items-center justify-center  bg-black  text-white rounded-full "
             >
               {user.userName}
             </div>
           ))}
-          <div className="p-2 text-center text-xs min-w-20 border-3 bg-black border-green-700 text-white rounded-full ">
-            k
-          </div>
-          <div className="p-2 text-center text-xs min-w-20 border-3 bg-black border-green-700 text-white rounded-full ">
-            k
-          </div>
-          <div className="p-2 text-center text-xs min-w-20 border-3 bg-black border-green-700 text-white rounded-full ">
-            k
-          </div>
-          <div className="p-2 text-center text-xs min-w-20 border-3 bg-black border-green-700 text-white rounded-full ">
-            k
-          </div>
-          <div className="p-2 text-center text-xs min-w-20 border-3 bg-black border-green-700 text-white rounded-full ">
-            k
-          </div>
         </div>
-        <div className=" m-4 rounded">
-          <div className="text-xs flex justify-center opacity-60">
-            <div>May10 | 9:55 PM</div>
-          </div>
-          <div className="flex justify-end h-fit space-y-4">
-            <div className="border-2 p-4 m-2 rounded-2xl">Hello! </div>
-          </div>
+        <div className="mb-60 m-2 rounded">
+          {displayMessage?.map((user, i) => (
+            <div key={i} className="flex mt-2 justify-end h-fit ">
+              <div className="">
+                <div className="text-xs text-right opacity-60">
+                  {user.DisplayName}
+                </div>
+                <div className="border-2  p-4 rounded-lg bg-zinc-800 text-white relative ">
+                  <div className="">{user.text}</div>
+                  <div className="text-xs right-0 absolute  opacity-50  ">
+                    {user.createdAt?.toDate() ? (
+                      user.createdAt?.toDate().toLocaleString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
+                    ) : (
+                      <span className="loading loading-spinner loading-xs"></span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </main>
-      <div className="fixed bottom-0 w-full h-20 flex items-center justify-center border-t rounded-2xl">
+      <div className="fixed bottom-0 w-full h-20 flex items-center justify-center border-t rounded-2xl bg-white">
         <div className="flex w-full max-w-sm items-center space-x-2 m-4">
           <Input
             className="rounded-full h-10 text-black"
+            value={message}
             type="text"
             placeholder="Message"
             onChange={(e) => setMessage(e.target.value)}
