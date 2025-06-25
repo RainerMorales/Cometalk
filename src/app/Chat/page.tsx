@@ -33,6 +33,7 @@ export default function Home() {
 
   const [dialog, setDialog] = useState(true);
   const [users, setUsers] = useState<{ name: string; userName: string }[]>([]);
+  const [curuser,setCurruser]=useState(null)
   const [displayMessage, setDisplayMessage] =
     useState<{ text: string; DisplayName: string; createdAt: Timestamp }[]>();
   useEffect(() => {
@@ -40,6 +41,10 @@ export default function Home() {
       const usersData = snapshot.docs.map(
         (doc) => doc.data() as { name: string; userName: string }
       );
+      // const unsub = auth.onAuthStateChanged((user)=>{
+      //   setCurruser(user)
+      // })
+
       setUsers(usersData);
     });
     return () => unsubscribe();
@@ -52,7 +57,11 @@ export default function Home() {
     const messages = onSnapshot(messageQuery, (snapshot) => {
       const userMessages = snapshot.docs.map(
         (doc) =>
-          doc.data() as { text: string; DisplayName: string; createdAt: Timestamp }
+          doc.data() as {
+            text: string;
+            DisplayName: string;
+            createdAt: Timestamp;
+          }
       );
       setDisplayMessage(userMessages.reverse());
     });
@@ -111,28 +120,37 @@ export default function Home() {
         </Button>
       </div>
       <main className="h- max-w-2xl m-auto ">
-        <div className="border rounded overflow-auto p-4 gap-2 flex">
+        <div className="bg-zinc-300 rounded overflow-auto p-4 gap-2 flex">
           {users.map((user, i) => (
             <div
               key={i}
-              className="p-2 text-center text-xs min-w-18  flex items-center justify-center  bg-black  text-white rounded-full "
+              className="indicator p-2 text-center text-xs min-w-18  flex items-center justify-center bg-black rounded-full "
             >
-              {user.userName}
+              <span className="indicator-item status bg-green-400 rounded-full"></span>
+              <div className="bg-base-300 grid text-white place-items-center">
+                {user.userName}
+              </div>
             </div>
           ))}
         </div>
         <div className="mb-60 m-2 rounded">
+          {/* <div className="indicator">
+            <span className="indicator-item status bg-amber-400 rounded-full"></span>
+            <div className="bg-base-300 grid h-32 w-32 place-items-center">
+              content
+            </div>
+          </div> */}
           {displayMessage?.map((user, i) => (
-            <div key={i} className="flex mt-2 justify-end h-fit ">
-              <div className="">
-                <div className="text-xs text-right opacity-60">
+            <div key={i} className="flex justify-end mt-2 px-2 sm:px-4">
+              <div className="max-w-[80%] sm:max-w-[60%] relative">
+                <div className="text-xs text-right opacity-60 mb-1">
                   {user.DisplayName}
                 </div>
-                <div className="border-2  p-4 rounded-lg bg-zinc-800 text-white relative ">
-                  <div className="">{user.text}</div>
-                  <div className="text-xs right-0 absolute  opacity-50  ">
-                    {user.createdAt?.toDate() ? (
-                      user.createdAt?.toDate().toLocaleString([], {
+                <div className="border p-3 sm:p-4 rounded-lg bg-zinc-800 text-white relative">
+                  <div>{user.text}</div>
+                  <div className="text-[10px] sm:text-xs opacity-50 text-right mt-1">
+                    {user.createdAt?.toDate ? (
+                      user.createdAt.toDate().toLocaleString([], {
                         hour: "2-digit",
                         minute: "2-digit",
                         hour12: true,
