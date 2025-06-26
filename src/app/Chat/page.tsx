@@ -13,7 +13,6 @@ import {
   collection,
   addDoc,
   serverTimestamp,
-  getDocs,
   onSnapshot,
   query,
   orderBy,
@@ -22,18 +21,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IoSend } from "react-icons/io5";
-import { signOut } from "firebase/auth";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Drawer from "@/components/Drawer";
 import toast from "react-hot-toast";
 export default function Home() {
   const user = auth.currentUser;
-  const router = useRouter();
   const [message, setMessage] = useState("");
 
   const [dialog, setDialog] = useState(true);
   const [users, setUsers] = useState<{ name: string; userName: string }[]>([]);
-  const [curuser,setCurruser]=useState(null)
+  // const [curuser,setCurruser]=useState(null)
   const [displayMessage, setDisplayMessage] =
     useState<{ text: string; DisplayName: string; createdAt: Timestamp }[]>();
   useEffect(() => {
@@ -67,15 +64,7 @@ export default function Home() {
     });
     return () => messages();
   }, []);
-  const Logout = async () => {
-    try {
-      await signOut(auth);
-      router.push("/Login");
-    } catch (err) {
-      console.log(err);
-      alert("something went wrong!");
-    }
-  };
+ 
   const sendMessage = async () => {
     if (!message.trim()) {
       toast.error("Type Something!", {
@@ -114,13 +103,11 @@ export default function Home() {
         </AlertDialogContent>
       </AlertDialog>
       <div className=" flex items-center justify-between text-center p-4 bg-black  border-b">
-        <div className="text-white font-bold ">{user?.displayName}</div>
-        <Button onClick={Logout} className="bg-red-800">
-          Log out
-        </Button>
+        <div className="text-white font-bold ">Cometalk</div>
+        <Drawer></Drawer>
       </div>
       <main className="h- max-w-2xl m-auto ">
-        <div className="bg-zinc-300 rounded overflow-auto p-4 gap-2 flex">
+        <div className="border-b shadow rounded overflow-auto p-4 gap-2 flex">
           {users.map((user, i) => (
             <div
               key={i}

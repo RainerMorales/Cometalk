@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button"; // update path if needed
 import Link from "next/link";
-import Image from "next/image";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 export default function HomePage() {
   return (
