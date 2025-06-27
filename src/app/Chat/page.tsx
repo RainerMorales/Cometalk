@@ -18,12 +18,14 @@ import {
   orderBy,
   Timestamp,
 } from "firebase/firestore";
+import { BlurFade } from "@/components/magicui/blur-fade";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IoSend } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import Drawer from "@/components/Drawer";
 import toast from "react-hot-toast";
+import { FaArrowRight } from "react-icons/fa";
 export default function Home() {
   const user = auth.currentUser;
   const [message, setMessage] = useState("");
@@ -64,7 +66,7 @@ export default function Home() {
     });
     return () => messages();
   }, []);
- 
+
   const sendMessage = async () => {
     if (!message.trim()) {
       toast.error("Type Something!", {
@@ -107,13 +109,21 @@ export default function Home() {
         <Drawer></Drawer>
       </div>
       <main className="h- max-w-2xl m-auto ">
-        <div className="border-b shadow rounded overflow-auto p-4 gap-2 flex">
+        <div className="border-b shadow rounded-full overflow-auto scrollbar-hidden p-4 gap-2 flex">
+          <div className="indicator p-2 text-center text-xs min-w-18  flex items-center justify-center bg-green-900 rounded-full ">
+            <div className="flex items-center justify-center bg-base-300 gap-2   text-white place-items-center">
+              User
+              <FaArrowRight />
+            </div>
+          </div>
+
           {users.map((user, i) => (
             <div
               key={i}
               className="indicator p-2 text-center text-xs min-w-18  flex items-center justify-center bg-black rounded-full "
             >
               <span className="indicator-item status bg-green-400 rounded-full"></span>
+
               <div className="bg-base-300 grid text-white place-items-center">
                 {user.userName}
               </div>
@@ -128,12 +138,18 @@ export default function Home() {
             </div>
           </div> */}
           {displayMessage?.map((user, i) => (
-            <div key={i} className="flex justify-end mt-2 px-2 sm:px-4">
+            <BlurFade
+              delay={0.25 + i * 0.25}
+              direction="left"
+              inView
+              key={i}
+              className="flex justify-end mt-2 px-2 sm:px-4"
+            >
               <div className="max-w-[80%] sm:max-w-[60%] relative">
                 <div className="text-xs text-right opacity-60 mb-1">
                   {user.DisplayName}
                 </div>
-                <div className="border p-3 sm:p-4 rounded-lg bg-zinc-800 text-white relative">
+                <div className="borde p-3 sm:p-4 rounded-lg bg-zinc-800 text-white relative">
                   <div>{user.text}</div>
                   <div className="text-[10px] sm:text-xs opacity-50 text-right mt-1">
                     {user.createdAt?.toDate ? (
@@ -148,7 +164,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-            </div>
+            </BlurFade>
           ))}
         </div>
       </main>

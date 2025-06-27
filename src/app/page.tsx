@@ -42,37 +42,51 @@ export default function HomePage() {
               </Button>
             </AlertDialogTrigger>
 
-            <AlertDialogContent className="max-h-[80vh] overflow-y-auto">
+            <AlertDialogContent className="max-h-[80vh] overflow-y-auto bg-white text-black border border-neutral-200">
               <AlertDialogHeader>
-                <AlertDialogTitle>About This Chat System</AlertDialogTitle>
+                <AlertDialogTitle className="text-xl font-bold text-neutral-900">
+                  About This Chat System
+                </AlertDialogTitle>
+
                 <AlertDialogDescription asChild>
-                  <div className="text-left space-y-4 text-sm">
+                  <div className="text-left space-y-5 text-sm leading-relaxed text-neutral-700">
                     <p>
-                      Welcome to our chat platform — a simple, real-time
-                      messaging system built with love and respect.
+                      Welcome to our chat platform — a real-time messaging
+                      experience built with simplicity, privacy, and community
+                      in mind.
                     </p>
 
-                    <p className="font-semibold">How to Use:</p>
-                    <ol className="list-decimal list-inside space-y-1">
-                      <li>Create an account using your email and password.</li>
-                      <li>Log in to access the chat room.</li>
-                      <li>Send messages and see others chat in real time.</li>
-                      <li>
-                        Be kind, respectful, and follow the community rules.
-                      </li>
-                    </ol>
+                    <div>
+                      <p className="font-semibold text-base text-neutral-900">
+                        How to Use:
+                      </p>
+                      <ol className="list-decimal list-inside space-y-2">
+                        <li>
+                          Create an account using your email and password.
+                        </li>
+                        <li>
+                          <strong className="text-black">
+                            Verify your email
+                          </strong>{" "}
+                          — a verification link will be sent.
+                        </li>
+                        <li>Once verified, log in to access the chat room.</li>
+                        <li>Chat with others in real time.</li>
+                      </ol>
+                    </div>
 
-                    <p className="mt-4">
-                      💡 <strong>Reminder:</strong> Use kind and respectful
-                      language. No spam or offensive content. Violators may be
-                      banned.
-                    </p>
+                    <div className="text-sm border-t pt-4 border-neutral-200 text-neutral-600">
+                      💡 <strong className="text-black">Reminder:</strong>{" "}
+                      Please use respectful language at all times. Spamming,
+                      hate speech, or inappropriate behavior will lead to
+                      suspension or banning.
+                    </div>
                   </div>
                 </AlertDialogDescription>
               </AlertDialogHeader>
 
               <AlertDialogFooter>
-                <AlertDialogCancel className="bg-black text-white">
+                <AlertDialogCancel className="bg-neutral-900 text-white hover:bg-neutral-800 transition">
                   Close
                 </AlertDialogCancel>
               </AlertDialogFooter>

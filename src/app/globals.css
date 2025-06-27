@@ -3,6 +3,10 @@
 @plugin "daisyui" {
   themes: false;
 }
+.scrollbar-hidden {
+  scrollbar-width: none;         /* Firefox */
+  -ms-overflow-style: none;      /* IE and Edge */
+}
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
