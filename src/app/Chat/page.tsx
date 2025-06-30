@@ -119,7 +119,7 @@ export default function Home() {
         <Drawer></Drawer>
       </div>
       <main className="max-w-2xl m-auto ">
-        <div className="sticky top-0 z-50 bg-white/30 backdrop-blur-sm border-b shadow rounded overflow-auto scrollbar-hidden p-4 gap-2 flex">
+        <div className="sticky top-0 z-20 bg-white/30 backdrop-blur-sm border-b shadow rounded overflow-auto scrollbar-hidden p-4 gap-2 flex">
           <div className="indicator p-2 text-center text-xs min-w-18  flex items-center justify-center bg-green-900 rounded-full ">
             <div className="flex items-center justify-center bg-base-300 gap-2   text-white place-items-center">
               User
