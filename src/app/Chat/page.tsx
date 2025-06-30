@@ -26,7 +26,6 @@ import { useEffect, useState } from "react";
 import Drawer from "@/components/Drawer";
 import toast from "react-hot-toast";
 import { FaArrowRight } from "react-icons/fa";
-import { getAuth } from "firebase/auth";
 export default function Home() {
   const user = auth.currentUser;
 
@@ -71,10 +70,10 @@ export default function Home() {
     return () => messages();
   }, []);
 
-  useEffect(() => {
-    //CURRENT USER
-    const auth = getAuth();
-  }, []);
+  // useEffect(() => {
+  //   //CURRENT USER
+  //   const auth = getAuth();
+  // }, []);
 
   const sendMessage = async () => {
     if (!message.trim()) {
