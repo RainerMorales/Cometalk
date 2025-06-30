@@ -26,29 +26,32 @@ import { useEffect, useState } from "react";
 import Drawer from "@/components/Drawer";
 import toast from "react-hot-toast";
 import { FaArrowRight } from "react-icons/fa";
+import { getAuth } from "firebase/auth";
 export default function Home() {
   const user = auth.currentUser;
-  const [message, setMessage] = useState("");
 
+  console.log(user?.displayName);
+  const [message, setMessage] = useState("");
   const [dialog, setDialog] = useState(true);
   const [users, setUsers] = useState<{ name: string; userName: string }[]>([]);
-  // const [curuser,setCurruser]=useState(null)
   const [displayMessage, setDisplayMessage] =
-    useState<{ text: string; DisplayName: string; createdAt: Timestamp }[]>();
+    useState<
+      { text: string; DisplayName: string; createdAt: Timestamp; uid: string }[]
+    >();
+
   useEffect(() => {
+    //
     const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
       const usersData = snapshot.docs.map(
         (doc) => doc.data() as { name: string; userName: string }
       );
-      // const unsub = auth.onAuthStateChanged((user)=>{
-      //   setCurruser(user)
-      // })
-
       setUsers(usersData);
     });
     return () => unsubscribe();
   }, []);
+
   useEffect(() => {
+    //MESSAGES
     const messageQuery = query(
       collection(db, "messages"),
       orderBy("createdAt", "desc")
@@ -57,6 +60,7 @@ export default function Home() {
       const userMessages = snapshot.docs.map(
         (doc) =>
           doc.data() as {
+            uid: string;
             text: string;
             DisplayName: string;
             createdAt: Timestamp;
@@ -65,6 +69,11 @@ export default function Home() {
       setDisplayMessage(userMessages.reverse());
     });
     return () => messages();
+  }, []);
+
+  useEffect(() => {
+    //CURRENT USER
+    const auth = getAuth();
   }, []);
 
   const sendMessage = async () => {
@@ -86,6 +95,7 @@ export default function Home() {
       alert(err);
     }
   };
+
   return (
     <>
       <AlertDialog open={dialog} onOpenChange={setDialog}>
@@ -108,8 +118,8 @@ export default function Home() {
         <div className="text-white font-bold ">Cometalk</div>
         <Drawer></Drawer>
       </div>
-      <main className="h- max-w-2xl m-auto ">
-        <div className="border-b shadow rounded-full overflow-auto scrollbar-hidden p-4 gap-2 flex">
+      <main className="max-w-2xl m-auto ">
+        <div className="sticky top-0 z-50 bg-white/30 backdrop-blur-sm border-b shadow rounded overflow-auto scrollbar-hidden p-4 gap-2 flex">
           <div className="indicator p-2 text-center text-xs min-w-18  flex items-center justify-center bg-green-900 rounded-full ">
             <div className="flex items-center justify-center bg-base-300 gap-2   text-white place-items-center">
               User
@@ -118,7 +128,10 @@ export default function Home() {
           </div>
 
           {users.map((user, i) => (
-            <div
+            <BlurFade
+              delay={0.15 + i * 0.15}
+              blur="0px"
+              direction="left"
               key={i}
               className="indicator p-2 text-center text-xs min-w-18  flex items-center justify-center bg-black rounded-full "
             >
@@ -127,46 +140,56 @@ export default function Home() {
               <div className="bg-base-300 grid text-white place-items-center">
                 {user.userName}
               </div>
-            </div>
-          ))}
-        </div>
-        <div className="mb-60 m-2 rounded">
-          {/* <div className="indicator">
-            <span className="indicator-item status bg-amber-400 rounded-full"></span>
-            <div className="bg-base-300 grid h-32 w-32 place-items-center">
-              content
-            </div>
-          </div> */}
-          {displayMessage?.map((user, i) => (
-            <BlurFade
-              delay={0.25 + i * 0.25}
-              direction="left"
-              inView
-              key={i}
-              className="flex justify-end mt-2 px-2 sm:px-4"
-            >
-              <div className="max-w-[80%] sm:max-w-[60%] relative">
-                <div className="text-xs text-right opacity-60 mb-1">
-                  {user.DisplayName}
-                </div>
-                <div className="borde p-3 sm:p-4 rounded-lg bg-zinc-800 text-white relative">
-                  <div>{user.text}</div>
-                  <div className="text-[10px] sm:text-xs opacity-50 text-right mt-1">
-                    {user.createdAt?.toDate ? (
-                      user.createdAt.toDate().toLocaleString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                      })
-                    ) : (
-                      <span className="loading loading-spinner loading-xs"></span>
-                    )}
-                  </div>
-                </div>
-              </div>
             </BlurFade>
           ))}
         </div>
+        <div className="mb-60 m-2 rounded">
+          {displayMessage?.map((mess, i) => {
+            const current = mess.uid === user?.uid;
+            return (
+              <div
+                key={i}
+                className={`flex m-4 ${
+                  current ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div className="flex flex-col">
+                  <div
+                    className={`opacity-60 text-xs  ${
+                      current ? "text-right" : "text-left"
+                    }`}
+                  >
+                    {mess.DisplayName}
+                  </div>
+                  <div
+                    className={`rounded-md p-3 ${
+                      current
+                        ? "bg-zinc-800 text-white"
+                        : "bg-white border-1 text-black"
+                    }`}
+                  >
+                    {mess.text}
+                    <div
+                      className={`text-xs opacity-40 p-1 ${
+                        current ? "text-right" : "text-left"
+                      }`}
+                    >
+                      {mess.createdAt?.toDate ? (
+                        mess.createdAt.toDate().toLocaleTimeString([], {
+                          hour: "2-digit",
+                          hour12: true,
+                          minute: "2-digit",
+                        })
+                      ) : (
+                        <span className="loading loading-spinner loading-xs"></span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>  
       </main>
       <div className="fixed bottom-0 w-full h-20 flex items-center justify-center border-t rounded-2xl bg-white">
         <div className="flex w-full max-w-sm items-center space-x-2 m-4">
