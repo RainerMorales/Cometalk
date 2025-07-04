@@ -19,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${lato.className} antialiased bg-gray-100`}>
+      <body
+        className={`${lato.className} antialiased bg-gray-100 bg-[url('/background.jpg')] bg-cover`}
+      >
         <Toaster></Toaster>
         {children}
       </body>

@@ -14,7 +14,7 @@ import Link from "next/link";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 export default function HomePage() {
   return (
-    <div className="relative min-h-screen flex flex-col justify-start p-32 items-center">
+    <div className="relative   min-h-screen flex flex-col justify-start p-32 items-center">
       <main className="flex flex-col items-center justify-center gap-20 px-6 text-left">
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center text-6xl font-extrabold">
@@ -30,14 +30,13 @@ export default function HomePage() {
 
         <div className="flex flex-col gap-2 ">
           <Link href="/Login">
-            <Button className="w-80 py-6 hover:bg-gray-900  border">
+            <Button className="w-80 py-6 hover:bg-black  border  rounded-full hover:scale-105">
               Get Started!
             </Button>
           </Link>
-
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button className="bg-white hover:bg-gray-100 text-black w-80 py-6 border shadow-2xl">
+              <Button className="bg-white hover:bg-white text-black w-80 py-6 border  rounded-full hover:scale-105">
                 About
               </Button>
             </AlertDialogTrigger>
