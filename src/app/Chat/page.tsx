@@ -26,6 +26,7 @@ import { useEffect, useState } from "react";
 import Drawer from "@/components/Drawer";
 import toast from "react-hot-toast";
 import { FaArrowRight } from "react-icons/fa";
+import { WordRotate } from "@/components/magicui/word-rotate";
 export default function Home() {
   const user = auth.currentUser;
 
@@ -114,7 +115,10 @@ export default function Home() {
         </AlertDialogContent>
       </AlertDialog>
       <div className=" flex items-center justify-between text-center p-4 bg-black  border-b">
-        <div className="text-white font-bold ">Cometalk</div>
+        <WordRotate
+          className="text-white font-bold "
+          words={["Cometalk", user?.displayName || "user" ]}
+        />
         <Drawer></Drawer>
       </div>
       <main className="max-w-2xl m-auto ">
@@ -134,15 +138,13 @@ export default function Home() {
               key={i}
               className="indicator p-2 text-center text-xs min-w-18  flex items-center justify-center bg-black rounded-full "
             >
-              <span className="indicator-item status bg-green-400 rounded-full"></span>
-
               <div className="bg-base-300 grid text-white place-items-center">
                 {user.userName}
               </div>
             </BlurFade>
           ))}
         </div>
-        <div className="mb-60 m-2 rounded">
+        <div className=" m-2 rounded h-screen bg-white/40 backdrop-blur-[2px] ">
           {displayMessage?.map((mess, i) => {
             const current = mess.uid === user?.uid;
             return (
@@ -188,7 +190,7 @@ export default function Home() {
               </div>
             );
           })}
-        </div>  
+        </div>
       </main>
       <div className="fixed bottom-0 w-full h-20 flex items-center justify-center border-t rounded-2xl bg-white">
         <div className="flex w-full max-w-sm items-center space-x-2 m-4">
