@@ -24,8 +24,7 @@ export default function ChatLayout({
     return (
       <>
         <div className="h-screen flex justify-center items-center">
-            Please Wait🙂..
-          <span className="loading loading-spinner loading-xs"></span>
+          <span className="loading loading-spinner loading-xl"></span>
         </div>
       </>
     );

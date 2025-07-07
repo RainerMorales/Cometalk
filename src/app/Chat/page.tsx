@@ -117,7 +117,7 @@ export default function Home() {
       <div className=" flex items-center justify-between text-center p-4 bg-black  border-b">
         <WordRotate
           className="text-white font-bold "
-          words={["Cometalk", user?.displayName || "user" ]}
+          words={["Cometalk", user?.displayName || "user"]}
         />
         <Drawer></Drawer>
       </div>
@@ -148,7 +148,11 @@ export default function Home() {
           {displayMessage?.map((mess, i) => {
             const current = mess.uid === user?.uid;
             return (
-              <div
+              <BlurFade
+                direction="up"
+                delay={i * 0.05} 
+                inView
+                blur="0px"
                 key={i}
                 className={`flex m-4 ${
                   current ? "justify-end" : "justify-start"
@@ -187,7 +191,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </BlurFade>
             );
           })}
         </div>
