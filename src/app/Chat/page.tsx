@@ -121,7 +121,7 @@ export default function Home() {
         />
         <Drawer></Drawer>
       </div>
-      <main className="max-w-2xl m-auto ">
+      <main className="max-w-2xl m-auto  ">
         <div className="sticky top-0 z-20 bg-white/30 backdrop-blur-sm border-b shadow rounded overflow-auto scrollbar-hidden p-4 gap-2 flex">
           <div className="indicator p-2 text-center text-xs min-w-18  flex items-center justify-center bg-green-900 rounded-full ">
             <div className="flex items-center justify-center bg-base-300 gap-2   text-white place-items-center">
@@ -144,7 +144,7 @@ export default function Home() {
             </BlurFade>
           ))}
         </div>
-        <div className=" m-2 rounded h-screen bg-white/40 backdrop-blur-[2px] ">
+        <div className=" m-2 rounded mb-30 bg-white/40 backdrop-blur-[2px] ">
           {displayMessage?.map((mess, i) => {
             const current = mess.uid === user?.uid;
             return (
@@ -166,7 +166,7 @@ export default function Home() {
                     className={`rounded-md p-3 ${
                       current
                         ? "bg-zinc-800 text-white"
-                        : "bg-white border-1 text-black"
+                        : "bg-zinc-100 border-1 text-black"
                     }`}
                   >
                     {mess.text}
