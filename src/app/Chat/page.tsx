@@ -144,13 +144,13 @@ export default function Home() {
             </BlurFade>
           ))}
         </div>
-        <div className=" m-2 rounded mb-30 bg-white/40 backdrop-blur-[2px] ">
+        <div className=" m-2 rounded mb-40 ">
           {displayMessage?.map((mess, i) => {
             const current = mess.uid === user?.uid;
             return (
               <BlurFade
                 direction="up"
-                delay={i * 0.05} 
+                delay={i * 0.05}
                 inView
                 blur="0px"
                 key={i}
