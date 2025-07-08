@@ -169,8 +169,8 @@ export default function Home() {
                   <div
                     className={`rounded-md p-3 ${
                       current
-                        ? "bg-zinc-800 text-white"
-                        : "bg-zinc-100 border-1 text-black"
+                        ? "bg-black text-white"
+                        : "bg-white text-black border-1 "
                     }`}
                   >
                     {mess.text}

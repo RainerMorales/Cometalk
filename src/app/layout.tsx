@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${lato.className} antialiased bg-gray-100 bg-[url('/background.jpg')] bg-contain bg-fixed`}
+        className={`${lato.className} bg-[url('/background.jpg')] bg-contain bg-fixed`}
       >
         <Toaster></Toaster>
         {children}

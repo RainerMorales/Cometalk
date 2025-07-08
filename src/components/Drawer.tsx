@@ -45,7 +45,7 @@ export default function Drawer() {
             <AlertDialogAction className="bg-white text-black border">
               Cancel
             </AlertDialogAction>
-            <AlertDialogAction onClick={Logout} className="bg-red-800">
+            <AlertDialogAction onClick={Logout} className="bg-red-800 ">
               Log Out
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -53,7 +53,7 @@ export default function Drawer() {
       </AlertDialog>
       <div className="">
         <div className="drawer-content">
-          <Button onClick={Logouts}>
+          <Button className="hover:bg-red-100" onClick={Logouts}>
             <IoLogOut className="text-red-700" size={24} />
           </Button>
         </div>
